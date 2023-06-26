@@ -40,7 +40,7 @@ public class SuggestionsResource
             throws Throwable
     {
         System.out.println(new Date() + " --- Entering suggestions endpoint parameters are: q=" + q + ", latitude="
-                + String.valueOf(latitude) + ", longitude=" + String.valueOf(longitude));
+                + latitude + ", longitude=" + longitude);
 
         Map<String, Object> results = new HashMap<>();
         try {
