@@ -1,18 +1,14 @@
 package com.coveo.challenge.cities.api;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.coveo.challenge.City;
-import com.coveo.challenge.CsvParser;
 import com.coveo.challenge.cities.usecases.SearchCitiesInput;
 import com.coveo.challenge.cities.usecases.SearchCitiesOutput;
 import com.coveo.challenge.cities.usecases.SearchCitiesUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,12 +30,17 @@ public class SuggestionsResource
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/suggestions")
-    public String suggestions(@RequestParam String q,
-                              @RequestParam(defaultValue = "45.9778182", required = false) Double latitude,
-                              @RequestParam(defaultValue = "-77.8968753", required = false) Double longitude,
-                              @RequestParam(required = false) Integer page)
+    public ResponseEntity<String> suggestions(@RequestParam String q,
+                                              @RequestParam(defaultValue = "45.9778182", required = false) Double latitude,
+                                              @RequestParam(defaultValue = "-77.8968753", required = false) Double longitude,
+                                              @RequestParam(required = false) Integer page)
             throws Throwable
     {
+        if (q == null) {
+            String message = "Required query parameter q (query string), is missing";
+            return ResponseEntity.badRequest().body(message);
+        }
+
         System.out.println(new Date() + " --- Entering suggestions endpoint parameters are: q=" + q + ", latitude="
                 + latitude + ", longitude=" + longitude);
 
@@ -54,7 +55,9 @@ public class SuggestionsResource
             }
 
             results.put("cities", output.getCities());
-            return new ObjectMapper().writeValueAsString(results);
+
+            String body = new ObjectMapper().writeValueAsString(results);
+            return ResponseEntity.ok(body);
         } catch (InvalidParameterException | MethodNotAllowedException e) {
             // will never happen
             throw new Error();
