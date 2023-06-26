@@ -10,6 +10,7 @@ import java.util.Map;
 import com.coveo.challenge.City;
 import com.coveo.challenge.CsvParser;
 import com.coveo.challenge.cities.usecases.SearchCitiesInput;
+import com.coveo.challenge.cities.usecases.SearchCitiesOutput;
 import com.coveo.challenge.cities.usecases.SearchCitiesUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,19 +46,14 @@ public class SuggestionsResource
         Map<String, Object> results = new HashMap<>();
         try {
             SearchCitiesInput input = new SearchCitiesInput(q, latitude, longitude, page);
-            List<City> cities = searchCitiesUseCase.searchBy(input);
+            SearchCitiesOutput output = searchCitiesUseCase.searchBy(input);
 
             if (page != null) {
                 results.put("page", page);
-                results.put("totalNumberOfPages", cities.size() % 5 == 0 ? cities.size() / 5 : (cities.size() / 5) + 1);
-                // TOOD : induces bug when first page is requested
-                if (page < (int) results.get("totalNumberOfPages")) {
-                    cities = cities.subList((page * 5), (page * 5 + 5) >= cities.size() ? cities.size() : page * 5 + 5);
-                } else {
-                    cities = List.of();
-                }
+                results.put("totalNumberOfPages", output.getTotalNumberOfPages());
             }
-            results.put("cities", cities);
+
+            results.put("cities", output.getCities());
             return new ObjectMapper().writeValueAsString(results);
         } catch (InvalidParameterException | MethodNotAllowedException e) {
             // will never happen

@@ -14,7 +14,7 @@ public class SearchCitiesUseCase {
     @Autowired
     private CsvParser csvParser;
 
-    public List<City> searchBy(SearchCitiesInput input) {
+    public SearchCitiesOutput searchBy(SearchCitiesInput input) {
         ClassLoader classLoader = getClass().getClassLoader();
         List<City> cities = new ArrayList<>(List.copyOf(csvParser.readCities(classLoader.getResourceAsStream("data/cities_canada-usa.tsv")).values()));
         cities.removeIf(c -> !c.name.contains(input.getQueryString()));
@@ -29,6 +29,20 @@ public class SearchCitiesUseCase {
             cities.removeIf(city -> Math.abs(city.longitude - longitude) > 20);
         }
 
-        return cities;
+        Integer page = input.getPage();
+        if (page != null) {
+            int totalNumberOfPages = cities.size() % 5 == 0 ? cities.size() / 5 : (cities.size() / 5) + 1;
+            // TOOD : induces bug when first page is requested
+            if (page < (int) totalNumberOfPages) {
+                return new SearchCitiesOutput(
+                    cities.subList((page * 5), (page * 5 + 5) >= cities.size() ? cities.size() : page * 5 + 5),
+                    totalNumberOfPages
+                );
+            } else {
+                return new SearchCitiesOutput(List.of(), null);
+            }
+        }
+
+        return new SearchCitiesOutput(cities, null);
     }
 }
