@@ -50,6 +50,7 @@ public class SuggestionsResource
             if (page != null) {
                 results.put("page", page);
                 results.put("totalNumberOfPages", cities.size() % 5 == 0 ? cities.size() / 5 : (cities.size() / 5) + 1);
+                // TOOD : induces bug when first page is requested
                 if (page < (int) results.get("totalNumberOfPages")) {
                     cities = cities.subList((page * 5), (page * 5 + 5) >= cities.size() ? cities.size() : page * 5 + 5);
                 } else {
