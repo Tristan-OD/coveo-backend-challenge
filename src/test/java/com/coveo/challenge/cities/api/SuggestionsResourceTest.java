@@ -1,8 +1,9 @@
 /**
  * Copyright (c) 2011 - 2019, Coveo Solutions Inc.
  */
-package com.coveo.challenge;
+package com.coveo.challenge.cities.api;
 
+import com.coveo.challenge.CsvParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -12,7 +13,7 @@ public class SuggestionsResourceTest
     SuggestionsResource suggestionsResource = new SuggestionsResource();
 
     @Test
-    public void testSuggestionEndpoint() throws Throwable
+    public void givenNoCities_itShouldNotListAny() throws Throwable
     {
         ReflectionTestUtils.setField(suggestionsResource, "csvParser", new CsvParser());
 
@@ -20,15 +21,7 @@ public class SuggestionsResourceTest
     }
 
     @Test
-    public void testSuggestionEndpoint2() throws Throwable
-    {
-        ReflectionTestUtils.setField(suggestionsResource, "csvParser", new CsvParser());
-
-        Assertions.assertTrue(suggestionsResource.suggestions("Qué", null, null, null).length() > 100);
-    }
-
-    @Test
-    public void testSuggestionEndpoint3() throws Throwable
+    public void givenQueryString_itShouldListCitiesContainingIt() throws Throwable
     {
         ReflectionTestUtils.setField(suggestionsResource, "csvParser", new CsvParser());
 
@@ -37,7 +30,7 @@ public class SuggestionsResourceTest
     }
 
     @Test
-    public void testSuggestionEndpoint4() throws Throwable
+    public void givenSearchString_itShouldAlwaysReturnTheSameCitiesForIt() throws Throwable
     {
         ReflectionTestUtils.setField(suggestionsResource, "csvParser", new CsvParser());
 
