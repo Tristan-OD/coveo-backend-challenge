@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.coveo.challenge.City;
 import com.coveo.challenge.CsvParser;
+import com.coveo.challenge.cities.usecases.SearchCitiesInput;
+import com.coveo.challenge.cities.usecases.SearchCitiesUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +24,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 public class SuggestionsResource
 {
-    @Autowired
-    private CsvParser csvParser;
+
+    private final SearchCitiesUseCase searchCitiesUseCase;
+
+    public SuggestionsResource(SearchCitiesUseCase searchCitiesUseCase) {
+        this.searchCitiesUseCase = searchCitiesUseCase;
+    }
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/suggestions")
@@ -38,17 +44,8 @@ public class SuggestionsResource
 
         Map<String, Object> results = new HashMap<>();
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            List<City> cities = new ArrayList<>(List.copyOf(csvParser.readCities(classLoader.getResourceAsStream("data/cities_canada-usa.tsv"))
-                                                                 .values()));
-            cities.removeIf(c -> !c.name.contains(q));
-
-            if (latitude != null) {
-                cities.removeIf(city -> Math.abs(city.latitude - latitude) > 10);
-            }
-            if (longitude != null) {
-                cities.removeIf(city -> Math.abs(city.longitude - longitude) > 20);
-            }
+            SearchCitiesInput input = new SearchCitiesInput(q, latitude, longitude, page);
+            List<City> cities = searchCitiesUseCase.searchBy(input);
 
             if (page != null) {
                 results.put("page", page);
