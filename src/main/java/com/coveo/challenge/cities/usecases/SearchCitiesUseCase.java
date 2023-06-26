@@ -17,7 +17,7 @@ public class SearchCitiesUseCase {
     public List<City> searchBy(SearchCitiesInput input) {
         ClassLoader classLoader = getClass().getClassLoader();
         List<City> cities = new ArrayList<>(List.copyOf(csvParser.readCities(classLoader.getResourceAsStream("data/cities_canada-usa.tsv")).values()));
-        cities.removeIf(c -> !c.name.contains(q));
+        cities.removeIf(c -> !c.name.contains(input.getQueryString()));
 
         Double latitude = input.getLatitude();
         if (latitude != null) {
