@@ -19,8 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-public class SuggestionsResource
-{
+public class SuggestionsResource {
 
     private final SearchCitiesUseCase searchCitiesUseCase;
 
@@ -30,19 +29,19 @@ public class SuggestionsResource
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/suggestions")
-    public ResponseEntity<String> suggestions(@RequestParam String q,
-                                              @RequestParam(defaultValue = "45.9778182", required = false) Double latitude,
-                                              @RequestParam(defaultValue = "-77.8968753", required = false) Double longitude,
-                                              @RequestParam(required = false) Integer page)
-            throws Throwable
-    {
+    public ResponseEntity<String> suggestions(
+        @RequestParam String q,
+        @RequestParam(defaultValue = "45.9778182", required = false) Double latitude,
+        @RequestParam(defaultValue = "-77.8968753", required = false) Double longitude,
+        @RequestParam(required = false) Integer page
+    ) throws Throwable {
         if (q == null) {
             String message = "Required query parameter q (query string), is missing";
             return ResponseEntity.badRequest().body(message);
         }
 
         System.out.println(new Date() + " --- Entering suggestions endpoint parameters are: q=" + q + ", latitude="
-                + latitude + ", longitude=" + longitude);
+            + latitude + ", longitude=" + longitude);
 
         Map<String, Object> results = new HashMap<>();
         try {
