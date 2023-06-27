@@ -1,10 +1,10 @@
 package com.coveo.challenge.cities.domain;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class CityPaginator {
     public List<City> takePageFrom(int page, List<City> cities) {
         if (page <= totalNumberOfPagesIn(cities)) {

@@ -92,7 +92,7 @@ class CityPaginatorTest {
     }
 
     @Test
-    public void givenLessCitiesThanAPages_itShouldStillSetTotalToOne() {
+    public void givenLessCitiesThanAPage_itShouldStillSetTotalToOne() {
         List<City> cities = givenCities(3);
 
         int numberOfPAges = paginator.totalNumberOfPagesIn(cities);
