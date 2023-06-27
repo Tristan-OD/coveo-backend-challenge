@@ -1,7 +1,6 @@
 package com.coveo.challenge.cities.domain;
 
 
-import com.coveo.challenge.City;
 import com.coveo.challenge.CityFixture;
 import org.junit.jupiter.api.Test;
 

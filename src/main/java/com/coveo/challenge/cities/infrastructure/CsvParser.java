@@ -1,10 +1,11 @@
-package com.coveo.challenge;
+package com.coveo.challenge.cities.infrastructure;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import com.coveo.challenge.cities.domain.City;
 import org.springframework.stereotype.Repository;
 
 /**

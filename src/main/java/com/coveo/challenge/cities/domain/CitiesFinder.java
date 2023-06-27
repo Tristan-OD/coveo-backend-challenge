@@ -1,6 +1,5 @@
 package com.coveo.challenge.cities.domain;
 
-import com.coveo.challenge.City;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

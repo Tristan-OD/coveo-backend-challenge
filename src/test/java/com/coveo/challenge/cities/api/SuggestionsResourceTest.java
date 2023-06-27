@@ -3,7 +3,7 @@
  */
 package com.coveo.challenge.cities.api;
 
-import com.coveo.challenge.City;
+import com.coveo.challenge.cities.domain.City;
 import com.coveo.challenge.CityFixture;
 import com.coveo.challenge.cities.usecases.SearchCitiesInput;
 import com.coveo.challenge.cities.usecases.SearchCitiesOutput;

@@ -1,5 +1,6 @@
 package com.coveo.challenge;
 
+import com.coveo.challenge.cities.domain.City;
 import com.github.javafaker.Faker;
 
 import java.util.Random;

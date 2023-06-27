@@ -37,6 +37,7 @@ public class SuggestionsResource {
     ) throws Throwable {
         if (q == null) {
             String message = "Required query parameter q (query string), is missing";
+            // TODO : spring boot configuration does not display message for some reason
             return ResponseEntity.badRequest().body(message);
         }
 
@@ -44,25 +45,17 @@ public class SuggestionsResource {
             + latitude + ", longitude=" + longitude);
 
         Map<String, Object> results = new HashMap<>();
-        try {
-            SearchCitiesInput input = new SearchCitiesInput(q, latitude, longitude, page);
-            SearchCitiesOutput output = searchCitiesUseCase.searchBy(input);
+        SearchCitiesInput input = new SearchCitiesInput(q, latitude, longitude, page);
+        SearchCitiesOutput output = searchCitiesUseCase.searchBy(input);
 
-            if (page != null) {
-                results.put("page", page);
-                results.put("totalNumberOfPages", output.getTotalNumberOfPages());
-            }
-
-            results.put("cities", output.getCities());
-
-            String body = new ObjectMapper().writeValueAsString(results);
-            return ResponseEntity.ok(body);
-        } catch (InvalidParameterException | MethodNotAllowedException e) {
-            // will never happen
-            throw new Error();
-        } catch (JsonProcessingException e) {
-            // will also never happen
-            throw new Throwable();
+        if (page != null) {
+            results.put("page", page);
+            results.put("totalNumberOfPages", output.getTotalNumberOfPages());
         }
+
+        results.put("cities", output.getCities());
+
+        String body = new ObjectMapper().writeValueAsString(results);
+        return ResponseEntity.ok(body);
     }
 }

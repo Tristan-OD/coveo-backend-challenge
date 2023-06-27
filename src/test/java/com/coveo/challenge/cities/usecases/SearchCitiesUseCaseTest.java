@@ -1,6 +1,6 @@
 package com.coveo.challenge.cities.usecases;
 
-import com.coveo.challenge.City;
+import com.coveo.challenge.cities.domain.City;
 import com.coveo.challenge.CityFixture;
 import com.coveo.challenge.cities.domain.CitiesFinder;
 import com.coveo.challenge.cities.domain.CityPaginator;
