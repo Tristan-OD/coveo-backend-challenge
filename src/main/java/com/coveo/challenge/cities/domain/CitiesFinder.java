@@ -1,31 +1,39 @@
 package com.coveo.challenge.cities.domain;
 
 import com.coveo.challenge.City;
-import com.coveo.challenge.CsvParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service
+@Component
 public class CitiesFinder {
-    @Autowired
-    private CsvParser csvParser;
+    private final CitiesDao citiesDao;
+
+
+    public CitiesFinder(CitiesDao citiesDao) {
+        this.citiesDao = citiesDao;
+    }
 
     public List<City> findBy(String queryString, Double latitude, Double longitude) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        List<City> cities = new ArrayList<>(List.copyOf(csvParser.readCities(classLoader.getResourceAsStream("data/cities_canada-usa.tsv")).values()));
-        cities.removeIf(c -> !c.name.contains(queryString));
+        List<City> cities = citiesDao.listAll();
+
+        if (cities.isEmpty()) {
+            return List.of();
+        }
+
+        List<City> matching = cities.stream()
+            .filter(c -> c.name.contains(queryString))
+            .collect(Collectors.toList());
 
         if (latitude != null) {
-            cities.removeIf(city -> Math.abs(city.latitude - latitude) > 10);
+            matching.removeIf(city -> Math.abs(city.latitude - latitude) > 10);
         }
 
         if (longitude != null) {
-            cities.removeIf(city -> Math.abs(city.longitude - longitude) > 20);
+            matching.removeIf(city -> Math.abs(city.longitude - longitude) > 20);
         }
 
-        return cities;
+        return matching;
     }
 }
