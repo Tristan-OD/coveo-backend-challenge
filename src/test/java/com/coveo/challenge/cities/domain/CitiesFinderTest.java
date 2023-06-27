@@ -79,6 +79,7 @@ class CitiesFinderTest {
 
         List<City> cities = finder.findBy("name", 40d, 30d);
 
+        assertSame(cities.size(), 2);
         assertSame(cities.get(0), city);
         assertSame(cities.get(1), anotherCity);
     }

@@ -7,12 +7,13 @@ import java.util.List;
 @Service
 public class CityPaginator {
     public List<City> takePageFrom(int page, List<City> cities) {
-        // TOOD : induces bug when first page is requested
-        if (page < (int) totalNumberOfPagesIn(cities)) {
-            return cities.subList((page * 5), (page * 5 + 5) >= cities.size() ? cities.size() : page * 5 + 5);
+        if (page <= totalNumberOfPagesIn(cities)) {
+            int pageStart = (page - 1) * 5;
+            int pageEnd = Math.min((page * 5), cities.size());
+            return cities.subList(pageStart, pageEnd);
         }
 
-        return List.of();
+        return cities;
     }
 
     public int totalNumberOfPagesIn(List<City> cities) {
