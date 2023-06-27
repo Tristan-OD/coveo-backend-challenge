@@ -1,4 +1,4 @@
-package com.coveo.challenge;
+package com.coveo.challenge.cities.domain;
 
 /**
  * Class representing a city and it's attributes.
